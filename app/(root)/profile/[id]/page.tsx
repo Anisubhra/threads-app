@@ -39,7 +39,7 @@ const Page = async ({ params }: Props) => {
                 <Tabs defaultValue="threads" className="w-full">
                     <TabsList className="tab">
                         {profileTabs.map((tab) => (
-                            <TabsTrigger key={tab.label} value={tab.label}>
+                            <TabsTrigger key={tab.label} value={tab.value}>
                                 <Image
                                     src={tab.icon}
                                     alt={tab.label}

@@ -1,10 +1,30 @@
 import ThreadCard from "@/components/cards/TheadCard";
 import { fetchPosts } from "@/lib/actions/thread.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { UserButton, currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-export default async function Home() {
-  const result = await fetchPosts(1, 30);
+interface Props {
+  searchParams: { [key: string]: string | undefined };
+}
+
+export default async function Home({
+  searchParams,
+}: Props) {
   const user = await currentUser();
+  if (!user) {
+    redirect("/onboarding");
+    return null;
+  }
+
+  const userInfo = await fetchUser(user.id);
+  if (!userInfo?.onboarded) redirect("/onboarding");
+
+  const result = await fetchPosts(
+    searchParams.page ? +searchParams.page : 1,
+    30
+  );
+
 
   return (
     <>
